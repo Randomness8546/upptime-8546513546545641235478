@@ -24,20 +24,15 @@ sites:
   - name: Sandbox Odoo - Database
     url: https://sandbox-odoo.bontexgeo.com/web/health?db_server_status=1
   - name: BTG
-    url: 91.183.156.162
+    url: vpn.bontexgeo.com
     type: globalping
     check: icmp-ping
     location: europe
   - name: ABG
-    url: 62.255.163.149
+    url: vpn.abgltd.com
     type: globalping
     check: icmp-ping
     location: europe
-  - name: GTN
-    url: 89.35.151.207
-    type: globalping
-    check: icmp-ping
-    location: europe    
 
 status-website:
   # Add your custom domain name, or remove the `cname` line if you don't have a domain

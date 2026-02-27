@@ -24,16 +24,20 @@ sites:
   - name: Sandbox Odoo - Database
     url: https://sandbox-odoo.bontexgeo.com/web/health?db_server_status=1
   - name: BTG
-    check: "tcp-ping"
     url: 91.183.156.162
-    port: 53
-  - name: Test Broken Site
-    url: https://thissitedoesnotexist.koj.co
-  - name: IPv6 test
-    url: forwardemail.net
-    port: 80
-    check: "tcp-ping"
-    ipv6: true
+    type: globalping
+    check: icmp-ping
+    location: europe
+  - name: ABG
+    url: 62.255.163.149
+    type: globalping
+    check: icmp-ping
+    location: europe
+  - name: GTN
+    url: 89.35.151.207
+    type: globalping
+    check: icmp-ping
+    location: europe    
 
 status-website:
   # Add your custom domain name, or remove the `cname` line if you don't have a domain

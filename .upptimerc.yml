@@ -6,11 +6,11 @@ sites:
   - name: Google
     url: https://www.google.be
   - name: Live Odoo - Web
-    url: https://odoo.bontexgeo.com/web/health
+    url: $LiveOdooWeb
   - name: Live Odoo - Websocket
-    url: https://odoo.bontexgeo.com/websocket/health
+    url: $LiveOdooWebsocket
   - name: Live Odoo - Database
-    url: https://odoo.bontexgeo.com/web/health?db_server_status=1
+    url: $LIVEODOODATABASE
   - name: Acc Odoo - Web
     url: https://acc-odoo.bontexgeo.com/web/health
   - name: Acc Odoo - Websocket

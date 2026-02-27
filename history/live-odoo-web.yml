@@ -1,7 +1,7 @@
-url: https://odoo.bontexgeo.com/web/health
-status: up
-code: 200
-responseTime: 395
-lastUpdated: 2026-02-27T15:35:26.778Z
+url: $LiveOdooWeb
+status: down
+code: 0
+responseTime: 0
+lastUpdated: 2026-02-27T15:54:53.557Z
 startTime: 2026-02-27T15:09:05.626Z
 generator: Upptime <https://github.com/upptime/upptime>

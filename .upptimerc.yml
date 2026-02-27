@@ -7,22 +7,31 @@ sites:
     url: https://www.google.be
   - name: Live Odoo - Web
     url: $LIVEODOOWEB
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Live Odoo - Websocket
     url: $LIVEODOOWEBSOCKET
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Live Odoo - Database
     url: $LIVEODOODATABASE
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Acc Odoo - Web
-    url: https://acc-odoo.bontexgeo.com/web/health
+    url: $ACCODOOWEB
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Acc Odoo - Websocket
-    url: https://acc-odoo.bontexgeo.com/websocket/health
+    url: $ACCODOOWEBSOCKET
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Acc Odoo - Database
-    url: https://acc-odoo.bontexgeo.com/web/health?db_server_status=1
+    url: $ACCODOODATABASE
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Sandbox Odoo - Web
-    url: https://sandbox-odoo.bontexgeo.com/web/health
+    url: $SANDBOXODOOWEB
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Sandbox Odoo - Websocket
-    url: https://sandbox-odoo.bontexgeo.com/websocket/health
+    url: $SANDBOXODOOWEBSOCKET
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: Sandbox Odoo - Database
-    url: https://sandbox-odoo.bontexgeo.com/web/health?db_server_status=1
+    url: $SANDBOXODOODATABASE
+    icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f
   - name: BTG
     url: vpn.bontexgeo.com
     type: globalping
@@ -30,6 +39,21 @@ sites:
     location: europe
   - name: ABG
     url: vpn.abgltd.com
+    type: globalping
+    check: icmp-ping
+    location: europe
+  - name: GTN
+    url: vpn.geotexan.com
+    type: globalping
+    check: icmp-ping
+    location: europe
+  - name: TGO
+    url: vpn.terageos.com
+    type: globalping
+    check: icmp-ping
+    location: europe
+  - name: STX
+    url: vpn.stratex.ch
     type: globalping
     check: icmp-ping
     location: europe

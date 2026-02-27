@@ -24,9 +24,9 @@ sites:
   - name: Sandbox Odoo - Database
     url: https://sandbox-odoo.bontexgeo.com/web/health?db_server_status=1
   - name: BTG
+    check: "tcp-ping"
     url: 91.183.156.162
-    type: globalping
-    location: europe
+    port: 53
   - name: Test Broken Site
     url: https://thissitedoesnotexist.koj.co
   - name: IPv6 test

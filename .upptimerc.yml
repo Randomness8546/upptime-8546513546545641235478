@@ -4,7 +4,7 @@ repo: upptime # The name of this repository
 
 sites:
   - name: Google
-    url: https://www.google.com
+    url: https://www.google.be
   - name: Sandbox odoo - Web
     url: https://sandbox-odoo.bontexgeo.com/web/health
   - name: Sandbox Odoo - Websocket

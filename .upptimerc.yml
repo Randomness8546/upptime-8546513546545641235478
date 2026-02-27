@@ -6,9 +6,9 @@ sites:
   - name: Google
     url: https://www.google.be
   - name: Live Odoo - Web
-    url: $LiveOdooWeb
+    url: $LIVEODOOWEB
   - name: Live Odoo - Websocket
-    url: $LiveOdooWebsocket
+    url: $LIVEODOOWEBSOCKET
   - name: Live Odoo - Database
     url: $LIVEODOODATABASE
   - name: Acc Odoo - Web

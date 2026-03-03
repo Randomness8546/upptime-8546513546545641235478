@@ -1,7 +1,7 @@
 url: $LIVEODOOWEBSOCKET
-status: up
-code: 200
-responseTime: 106
-lastUpdated: 2026-03-02T23:52:59.714Z
+status: down
+code: 502
+responseTime: 93
+lastUpdated: 2026-03-03T11:48:13.990Z
 startTime: 2026-02-27T15:09:06.128Z
 generator: Upptime <https://github.com/upptime/upptime>

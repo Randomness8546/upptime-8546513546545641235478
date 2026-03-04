@@ -35,27 +35,27 @@ sites:
   - name: BTG
     url: vpn.bontexgeo.com
     type: globalping
-    check: icmp-ping
+    check: tcp-ping
     location: europe
   - name: ABG
     url: vpn.abgltd.com
     type: globalping
-    check: icmp-ping
+    check: tcp-ping
     location: europe
   - name: GTN
     url: vpn.geotexan.com
     type: globalping
-    check: icmp-ping
+    check: tcp-ping
     location: europe
   - name: TGO
     url: vpn.terageos.com
     type: globalping
-    check: icmp-ping
+    check: tcp-ping
     location: europe
   - name: STX
     url: vpn.stratex.ch
     type: globalping
-    check: icmp-ping
+    check: tcp-ping
     location: europe
 
 status-website:

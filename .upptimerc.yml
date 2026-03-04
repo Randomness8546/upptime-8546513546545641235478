@@ -43,21 +43,25 @@ sites:
     type: globalping
     check: tcp-ping
     location: europe
+    icon: https://cdn-icons-png.flaticon.com/512/2574/2574944.png
   - name: GTN
     url: vpn.geotexan.com
     type: globalping
     check: tcp-ping
     location: europe
+    icon: https://cdn-icons-png.flaticon.com/512/2574/2574944.png
   - name: TGO
     url: vpn.terageos.com
     type: globalping
     check: tcp-ping
     location: europe
+    icon: https://cdn-icons-png.flaticon.com/512/2574/2574944.png
   - name: STX
     url: vpn.stratex.ch
     type: globalping
     check: tcp-ping
     location: europe
+    icon: https://cdn-icons-png.flaticon.com/512/2574/2574944.png
 
 status-website:
   # Add your custom domain name, or remove the `cname` line if you don't have a domain

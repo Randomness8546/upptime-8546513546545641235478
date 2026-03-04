@@ -1,0 +1,65 @@
+name: Patch GH Pages (inject 30‑day bars)
+
+on:
+  workflow_run:
+    workflows: ["Static Site CI"]   # run right after Upptime publishes the site
+    types: [completed]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      # Copy the runtime JS (from default branch) into gh-pages
+      - name: Fetch bars-30d.js from default branch
+        run: |
+          # Adjust BRANCH if needed (main vs master)
+          BRANCH="${{ github.event.repository.default_branch }}"
+          curl -sSL \
+            "https://raw.githubusercontent.com/${{ github.repository }}/${BRANCH}/bars-30d.js" \
+            -o bars-30d.js
+
+      # Inject <script> into the built index.html
+      - name: Write injector script
+        run: |
+          mkdir -p .github/scripts
+          cat > .github/scripts/inject-30d.js <<'EOF'
+          const fs = require('fs');
+          const path = 'index.html';
+          let html = fs.readFileSync(path, 'utf8');
+
+          // Add our script before </body> if not already present
+          if (!html.includes('bars-30d.js')) {
+            html = html.replace(
+              /<\/body>\s*<\/html>\s*$/i,
+              `  ./bars-30d.js</script>\n</body></html>`
+            );
+            fs.writeFileSync(path, html);
+            console.log('Injected bars-30d.js into index.html');
+          } else {
+            console.log('bars-30d.js already referenced; skipping injection.');
+          }
+          EOF
+
+      - name: Inject into index.html
+        run: node .github/scripts/inject-30d.js
+
+      - name: Commit & push changes
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git add index.html bars-30d.js
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "feat(status): inject 30‑day granular bars and hide default graphs"
+            git push
+          fi

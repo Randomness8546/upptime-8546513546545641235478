@@ -37,6 +37,7 @@ sites:
     type: globalping
     check: tcp-ping
     location: europe
+    icon: https://cdn-icons-png.flaticon.com/512/2574/2574944.png
   - name: ABG
     url: vpn.abgltd.com
     type: globalping

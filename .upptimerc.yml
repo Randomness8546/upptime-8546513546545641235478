@@ -3,8 +3,6 @@ owner: Randomness8546 # Your GitHub organization or username, where this reposit
 repo: upptime-8546513546545641235478 # The name of this repository
 
 sites:
-  - name: Google
-    url: https://www.google.be
   - name: Live Odoo - Web
     url: $LIVEODOOWEB
     icon: https://camo.githubusercontent.com/0cc67dd0de592c6e7483d25699a3f46123016baab19803271658100ff87b2860/68747470733a2f2f69636f6e732e6475636b6475636b676f2e636f6d2f6970332f6163632d6f646f6f2e626f6e74657867656f2e636f6d2e69636f

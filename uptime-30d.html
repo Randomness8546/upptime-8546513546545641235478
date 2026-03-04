@@ -1,99 +1,190 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <meta name="theme-color" content="#333333" />
-  <title>Uptime — laatste 30 dagen</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Last 30 days — Uptime</title>
 
-  <!-- Reuse Upptime’s stable theme + global CSS -->
-  <link rel="stylesheet" href="themes/light.css" media="(preferss"  media="(prefers-color-scheme, no hashed classes) ===== */
-    :root {
-      /* fallbacks if variables aren’t present */
-      --container-max: 1100px;
-      --surface: var(--card-background-color, #ffffff);
-      --text: var(--body-text-color, #111827);
-      --muted: #6b7280;
-      --border: var(--nav-border-bottom-color, #e5e7eb);
-      --bg: var(--body-background-color, #ffffff);
-      --ok: var(--ok, #16a34a);
-      --warn: var(--warn, #f59e0b);
-      --down: var(--down, #ef4444);
-    }
-    body { background: var(--bg); color: var(--text); margin: 0; }
-    .nav {
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .container {
-      max-width: var(--container-max);
-      margin: 0 auto;
-      padding: 12px 16px;
-    }
-    .brand {
-      display: flex; gap: 10px; align-items: center; text-decoration: none; color: inherit;
-      font-weight: 600;
-    }
-    .brand img { height: 28px; width: 28px; }
-    .main { padding: 16px 0 24px; }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 1px 2px rgba(0,0,0,.03);
-    }
-    h1 { font-size: 22px; margin: 0 0 10px; }
-    p.sub { margin: 4px 0 16px; color: var(--muted); }
+<!-- Container.
+     data-branch: 'master' or 'main'
+     data-include: comma-separated slugs, or '*' for all
+     data-days: number of days to render (30 by default)
+     data-thresholds: CSV for minute cutoffs (L1,L2,L3) -->
+<div id="uptime-30d"
+     data-owner="Randomness8546"
+     data-repo="upptime-8546513546545641235478"
+     data-branch="master"
+     data-include="*"
+     data-days="30"
+     data-thresholds="5,60,180"
+     style="max-width: 1100px; margin: 24px auto;"></div>
 
-    /* ===== Table styling close to Upptime ===== */
-    table.status-table { width: 100%; border-collapse: collapse; }
-    table.status-table th, table.status-table td {
-      padding: 8px 10px; border-bottom: 1px solid var(--border);
-    }
-    table.status-table th { text-align: left; font-weight: 600; font-size: 14px; }
-    table.status-table td { font-size: 14px; }
+<script type="module">
+/**
+ * Upptime 30-day Uptime Widget (granular colors)
+ * - Reads history/summary.json (Upptime summary) → dailyMinutesDown per service (YYYY-MM-DD).
+ * - Renders per-day cells with 4 levels:
+ *      lvl0: 0 min (Up)
+ *      lvl1: 1..L1 minutes
+ *      lvl2: (L1+1)..L2 minutes
+ *      lvl3: >L2 minutes  (L3 is reserved if you want a 5th level)
+ * - Computes last-30-day uptime % from dailyMinutesDown (fallback to uptimeMonth if needed).
+ *
+ * Upptime data details: summary.json includes dailyMinutesDown (minutes per day). 
+ * See community docs describing the summary schema. 
+ */
 
-    .pill { display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; }
-    .pill.up   { background: #d1e7dd; color:#0f5132; }
-    .pill.down { background: #f8d7da; color:#842029; }
-    .uptime { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+const host = document.getElementById('uptime-30d');
 
-    /* ===== 30‑day bar strip ===== */
-    .u-bars { display:grid; grid-auto-flow:column; grid-auto-columns: 10px; gap:3px; margin-top:4px; }
-    .u-bars .cell { width:10px; height:18px; border-radius:2px; border:1px solid transparent; }
-    .u-bars .lvl0 { background: color-mix(in oklab, var(--ok) 22%, transparent); border-color: color-mix(in oklab, var(--ok) 40%, transparent); }
-    .u-bars .lvl1 { background: color-mix(in oklab, var(--warn) 30%, transparent); border-color: color-mix(in oklab, var(--warn) 50%, transparent); }
-    .u-bars .lvl2 { background: color-mix(in oklab, #f97316 40%, transparent); border-color: color-mix(in oklab, #f97316 60%, transparent); }
-    .u-bars .lvl3 { background: color-mix(in oklab, var(--down) 45%, transparent); border-color: color-mix(in oklab, var(--down) 65%, transparent); }
+// Config from attributes
+const GH_OWNER  = host.dataset.owner;
+const GH_REPO   = host.dataset.repo;
+const GH_BRANCH = host.dataset.branch || 'master';
+const INCLUDE   = (host.dataset.include || '*').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+const DAYS      = Number(host.dataset.days || 30);
+const [L1, L2, L3] = (host.dataset.thresholds || '5,60,180').split(',').map(n => Number(n.trim()));
 
-    footer { border-top: 1px solid var(--border); margin-top: 24px; }
-    footer p { color: var(--muted); font-size: 13px; }
-    footer a { color: inherit; }
-  </style>
-</head>
-<body>
-  <!-- Top nav -->
-  <div class="nav">
-    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
-      <a class="brand" href="./c="https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/iconn>Upptime</span>
-      </a>
-      <div><a class="brand" style="font-weight:500" href="https://github.com/Randomness8546/upptime-854651354654564123- Main -->
-  <div class="main">
-    <div class="container">
-      <div class="card">
-        <h1>Uptime (laatste 30 dagen)</h1>
-        <p class="sub">Dag‑voor‑dag balken met granulariteit: 0 min (groen), 1–5 (geel), 6–60 (oranje), &gt;60 (rood).</p>
+// Helpers
+const RAW = (p) => `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${p}`;
+const today = new Date(); today.setHours(0,0,0,0);
+const toISO = (d) => d.toISOString().slice(0,10);
+const days = [...Array(DAYS)].map((_,i) => { const d = new Date(today); d.setDate(d.getDate() - (DAYS - 1 - i)); return toISO(d); });
 
-        <!-- Table is rendered here by JS -->
-        <div id="u30-root"></div>
-      </div>
+// --- Styles that adopt Upptime theme variables (with sensible fallbacks) ---
+const css = `
+:root {
+  /* Fallbacks if the page isn't loaded inside the status bundle */
+  --body-background-color: #ffffff;
+  --body-text-color: #111827;
+  --card-background-color: #ffffff;
+  --nav-border-bottom-color: #e5e7eb;
+  --badge-up-bg: #d1e7dd;
+  --badge-down-bg: #f8d7da;
+  --ok: #16a34a;   /* green 600 */
+  --warn: #f59e0b; /* amber 500 */
+  --orange: #f97316; /* orange 500 */
+  --down: #ef4444; /* red 500 */
+}
+.u30 {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  color: var(--body-text-color);
+  background: var(--body-background-color);
+  padding: 0 16px;
+}
+.u30 .card {
+  background: var(--card-background-color);
+  border: 1px solid var(--nav-border-bottom-color);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.03);
+}
+.u30 h1 { font-size: 18px; margin: 0 0 8px 0; }
+.u30 .sub { color: #6b7280; font-size: 13px; margin-bottom: 14px; }
+.u30 .legend { display:flex; align-items:center; gap:10px; font-size:12px; color:#6b7280; margin: 8px 0 16px; flex-wrap: wrap;}
+.u30 .chip { width:12px; height:12px; border-radius:3px; display:inline-block; border:1px solid rgba(0,0,0,.12); }
+.u30 .row { display:grid; grid-template-columns: 260px auto 90px; gap:12px; align-items:center; margin-bottom:10px; }
+.u30 .name { font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.u30 .strip { display:grid; grid-auto-flow:column; grid-auto-columns: 10px; gap:3px; }
+.u30 .cell { width:10px; height:18px; border-radius:2px; background: var(--badge-up-bg); border: 1px solid transparent; }
+.u30 .lvl0 { background: color-mix(in oklab, var(--ok) 22%, transparent); border-color: color-mix(in oklab, var(--ok) 40%, transparent); }
+.u30 .lvl1 { background: color-mix(in oklab, var(--warn) 30%, transparent); border-color: color-mix(in oklab, var(--warn) 50%, transparent); }
+.u30 .lvl2 { background: color-mix(in oklab, var(--orange) 40%, transparent); border-color: color-mix(in oklab, var(--orange) 60%, transparent); }
+.u30 .lvl3 { background: color-mix(in oklab, var(--down) 45%, transparent); border-color: color-mix(in oklab, var(--down) 65%, transparent); }
+.u30 .uptime { text-align: right; font-variant-numeric: tabular-nums; color:#374151; }
+@media (prefers-color-scheme: dark) {
+  .u30 .sub, .u30 .legend { color:#9aa4b2; }
+  .u30 .uptime { color:#cfd7df; }
+}
+`;
+const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
 
-      <footer class="container" style="padding:12px 0;">
-        <p>Deze pagina is <a href="https://github.com/Randomness8546/upptime-8546513546545641235478ce</a>, powered by <a href="https://upptime.js.org/">Upptime</a></p>
-      </footer>
-    </div>
-  </div>
+// Root
+const root = document.createElement('div'); root.className = 'u30';
+const card = document.createElement('div'); card.className = 'card';
+root.appendChild(card);
 
-  <script defer src="uptime-30d>
+// Header
+const hdr = document.createElement('div');
+hdr.innerHTML = `
+  <h1>Uptime — last ${DAYS} days</h1>
+  <div class="sub">Daily bars are colored by downtime minutes (granular) — not the whole bar.</div>
+  <div class="legend">
+    <span class="chip lvl0"></span><span>0 min</span>
+    <span class="chip lvl1"></span><span>1–${L1} min</span>
+    <span class="chip lvl2"></span><span>${L1+1}–${L2} min</span>
+    <span class="chip lvl3"></span><span>${L2+1}+ min</span>
+  </div>`;
+card.appendChild(hdr);
+
+// Container for rows
+const body = document.createElement('div'); card.appendChild(body);
+
+function level(minutes) {
+  if (minutes <= 0) return 'lvl0';
+  if (minutes <= L1) return 'lvl1';
+  if (minutes <= L2) return 'lvl2';
+  return 'lvl3';
+}
+
+function computeUptime30(svc) {
+  // Compute from dailyMinutesDown for the days we render (fallback to uptimeMonth if missing)
+  const totalMin = DAYS * 1440;
+  let down = 0;
+  for (const d of days) down += (svc.dailyMinutesDown && svc.dailyMinutesDown[d]) || 0;
+  if (totalMin > 0) return Math.max(0, 100 * (1 - down/totalMin));
+  // fallback
+  if (typeof svc.uptimeMonth === 'number') return svc.uptimeMonth;
+  if (typeof svc.uptime === 'number') return svc.uptime;
+  return null;
+}
+
+async function load() {
+  const url = RAW('history/summary.json');
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Cannot fetch ${url}: ${res.status}`);
+
+  /** Expected (subset):
+   * [{ name, slug, dailyMinutesDown: {YYYY-MM-DD: minutes}, uptimeMonth, uptime }]
+   * dailyMinutesDown is provided by Upptime's summary. */
+  const summary = await res.json();
+
+  const services = summary.filter(s => {
+    if (INCLUDE.length === 0 || INCLUDE[0] === '*') return true;
+    return INCLUDE.includes(String(s.slug || '').toLowerCase());
+  });
+
+  // Build rows
+  services.forEach(svc => {
+    const row = document.createElement('div'); row.className = 'row';
+
+    const name = document.createElement('div'); name.className = 'name';
+    name.textContent = svc.name || svc.slug || '(unnamed)';
+
+    const strip = document.createElement('div'); strip.className = 'strip';
+    days.forEach(d => {
+      const m = (svc.dailyMinutesDown && svc.dailyMinutesDown[d]) || 0;
+      const cell = document.createElement('div');
+      cell.className = `cell ${level(m)}`;
+      cell.title = `${name.textContent}\n${d} — ${m > 0 ? m + ' min down' : '0 min (up)'}`;
+      strip.appendChild(cell);
+    });
+
+    const pct = computeUptime30(svc);
+    const uptime = document.createElement('div'); uptime.className = 'uptime';
+    uptime.textContent = (pct === null) ? '' : `${pct.toFixed(2)}%`;
+
+    row.appendChild(name);
+    row.appendChild(strip);
+    row.appendChild(uptime);
+    body.appendChild(row);
+  });
+}
+
+load().catch(err => {
+  const pre = document.createElement('pre'); pre.style.color = 'crimson';
+  pre.textContent = `Uptime 30d widget error:\n${err}\n\nCheck that history/summary.json exists on branch "${GH_BRANCH}".`;
+  body.appendChild(pre);
+});
+
+host.replaceWith(root);
+</script>
 </html>

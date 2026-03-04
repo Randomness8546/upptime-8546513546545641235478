@@ -1,56 +1,51 @@
 name: Patch GH Pages (inject 30‑day bars)
 
 on:
-  workflow_run:
-    workflows: ["Static Site CI"]   # run right after Upptime publishes the site
-    types: [completed]
+  push:
+    branches: [ gh-pages ]
 
 permissions:
   contents: write
 
 jobs:
   patch:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         with:
           ref: gh-pages
+          persist-credentials: true
 
-      # Copy the runtime JS (from default branch) into gh-pages
-      - name: Fetch bars-30d.js from default branch
+      - name: Determine default branch
+        id: def
         run: |
-          # Adjust BRANCH if needed (main vs master)
-          BRANCH="${{ github.event.repository.default_branch }}"
-          curl -sSL \
-            "https://raw.githubusercontent.com/${{ github.repository }}/${BRANCH}/bars-30d.js" \
+          curl -sSL "https://api.github.com/repos/${{ github.repository }}" \
+            | jq -r '.default_branch' > .defbranch
+          echo "branch=$(cat .defbranch)" >> $GITHUB_OUTPUT
+
+      - name: Copy bars-30d.js from default branch path
+        run: |
+          BRANCH="${{ steps.def.outputs.branch }}"
+          curl -fsSL \
+            "https://raw.githubusercontent.com/${{ github.repository }}/${BRANCH}/.github/scripts/bars-30d.js" \
             -o bars-30d.js
 
-      # Inject <script> into the built index.html
-      - name: Write injector script
+      - name: Inject <script> into index.html
+        shell: node
         run: |
-          mkdir -p .github/scripts
-          cat > .github/scripts/inject-30d.js <<'EOF'
           const fs = require('fs');
-          const path = 'index.html';
-          let html = fs.readFileSync(path, 'utf8');
-
-          // Add our script before </body> if not already present
+          const p = 'index.html';
+          if (!fs.existsSync(p)) { throw new Error('index.html not found on gh-pages'); }
+          let html = fs.readFileSync(p, 'utf8');
           if (!html.includes('bars-30d.js')) {
-            html = html.replace(
-              /<\/body>\s*<\/html>\s*$/i,
-              `  ./bars-30d.js</script>\n</body></html>`
-            );
-            fs.writeFileSync(path, html);
+            html = html.replace(/<\/body>\s*<\/html>\s*$/i,
+              '  ./bars-30d.js</script>\n</body></html>');
+            fs.writeFileSync(p, html);
             console.log('Injected bars-30d.js into index.html');
           } else {
-            console.log('bars-30d.js already referenced; skipping injection.');
+            console.log('bars-30d.js already referenced; skipping');
           }
-          EOF
-
-      - name: Inject into index.html
-        run: node .github/scripts/inject-30d.js
 
       - name: Commit & push changes
         run: |
@@ -60,6 +55,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "feat(status): inject 30‑day granular bars and hide default graphs"
-            git push
+            git commit -m "feat(status): inject 30‑day granular bars into homepage"
+            git push origin gh-pages
           fi

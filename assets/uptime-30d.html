@@ -4,44 +4,96 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1" name="viewport" />
   <meta name="theme-color" content="#333333" />
-  <!-- IMPORTANT: base href must point to your project-pages root -->
-  /upptime-8546513546545641235478/
+  <title>Uptime — laatste 30 dagen</title>
 
-  <title>Uptime — last 30 days</title>
+  <!-- Reuse Upptime’s stable theme + global CSS -->
+  <link rel="stylesheet" href="themes/light.css" media="(preferss"  media="(prefers-color-scheme, no hashed classes) ===== */
+    :root {
+      /* fallbacks if variables aren’t present */
+      --container-max: 1100px;
+      --surface: var(--card-background-color, #ffffff);
+      --text: var(--body-text-color, #111827);
+      --muted: #6b7280;
+      --border: var(--nav-border-bottom-color, #e5e7eb);
+      --bg: var(--body-background-color, #ffffff);
+      --ok: var(--ok, #16a34a);
+      --warn: var(--warn, #f59e0b);
+      --down: var(--down, #ef4444);
+    }
+    body { background: var(--bg); color: var(--text); margin: 0; }
+    .nav {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 12px 16px;
+    }
+    .brand {
+      display: flex; gap: 10px; align-items: center; text-decoration: none; color: inherit;
+      font-weight: 600;
+    }
+    .brand img { height: 28px; width: 28px; }
+    .main { padding: 16px 0 24px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.03);
+    }
+    h1 { font-size: 22px; margin: 0 0 10px; }
+    p.sub { margin: 4px 0 16px; color: var(--muted); }
 
-  <!-- Reuse Upptime's theme + global CSS (stable, not hashed) -->
-  <link rel="stylesheet" href="themes/light.css" media="(prefers-color-scheme: light (optional) -->
-  <link rel="icon" type="image/svg" href="https://raw.githubusercontent.com/upptime/upptime/master  <div id="sapper"><!-- we only reuse the nav/footer styling classes -->
+    /* ===== Table styling close to Upptime ===== */
+    table.status-table { width: 100%; border-collapse: collapse; }
+    table.status-table th, table.status-table td {
+      padding: 8px 10px; border-bottom: 1px solid var(--border);
+    }
+    table.status-table th { text-align: left; font-weight: 600; font-size: 14px; }
+    table.status-table td { font-size: 14px; }
 
-    <!-- Top nav -->
-    <nav class="svelte-a08hsz">
-      <div class="svelte-a08hsz container">
-        <div>
-          <a class="svelte-a08hsz logo" href="https://Randomness641235478/
-            <img class="svelte-a08hsz" alt="" src="https://raw.githubusercontent.com/upptime/upptime.js.org/masterpptime</div>
-          </a>
-        </div>
-        <ul class="svelte-a08hsz">
-          <li><a class="svelte-a08hsz" target="_self" href="https://github.com/Randomness8546/upptime-8546513546545641235478 </nav>
+    .pill { display:inline-block; padding:2px 8px; border-radius:12px; font-size:12px; }
+    .pill.up   { background: #d1e7dd; color:#0f5132; }
+    .pill.down { background: #f8d7da; color:#842029; }
+    .uptime { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-    <!-- Main content -->
-    <main class="container">
-      <header class="svelte-ngkazm">
-        <h1><strong>Uptime (last 30 days)</strong> — binary daily bars with granular coloring</h1>
-      </header>
+    /* ===== 30‑day bar strip ===== */
+    .u-bars { display:grid; grid-auto-flow:column; grid-auto-columns: 10px; gap:3px; margin-top:4px; }
+    .u-bars .cell { width:10px; height:18px; border-radius:2px; border:1px solid transparent; }
+    .u-bars .lvl0 { background: color-mix(in oklab, var(--ok) 22%, transparent); border-color: color-mix(in oklab, var(--ok) 40%, transparent); }
+    .u-bars .lvl1 { background: color-mix(in oklab, var(--warn) 30%, transparent); border-color: color-mix(in oklab, var(--warn) 50%, transparent); }
+    .u-bars .lvl2 { background: color-mix(in oklab, #f97316 40%, transparent); border-color: color-mix(in oklab, #f97316 60%, transparent); }
+    .u-bars .lvl3 { background: color-mix(in oklab, var(--down) 45%, transparent); border-color: color-mix(in oklab, var(--down) 65%, transparent); }
 
-      <!-- Status table placeholder: our script will render here -->
-      <section class="svelte-8lnl4f live-status">
+    footer { border-top: 1px solid var(--border); margin-top: 24px; }
+    footer p { color: var(--muted); font-size: 13px; }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <!-- Top nav -->
+  <div class="nav">
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <a class="brand" href="./c="https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/iconn>Upptime</span>
+      </a>
+      <div><a class="brand" style="font-weight:500" href="https://github.com/Randomness8546/upptime-854651354654564123- Main -->
+  <div class="main">
+    <div class="container">
+      <div class="card">
+        <h1>Uptime (laatste 30 dagen)</h1>
+        <p class="sub">Dag‑voor‑dag balken met granulariteit: 0 min (groen), 1–5 (geel), 6–60 (oranje), &gt;60 (rood).</p>
+
+        <!-- Table is rendered here by JS -->
         <div id="u30-root"></div>
-      </section>
-    </main>
+      </div>
 
-    <footer class="svelte-jbr799">
-      <p>This page is <a href="https://github.com/Randomness8546/upptime-8546513546548open source</a>, powered by <a href="https://upptime.js.org/">Upptime</a></p>
-    </footer>
+      <footer class="container" style="padding:12px 0;">
+        <p>Deze pagina is <a href="https://github.com/Randomness8546/upptime-8546513546545641235478ce</a>, powered by <a href="https://upptime.js.org/">Upptime</a></p>
+      </footer>
+    </div>
   </div>
 
-  <!-- Our renderer -->
-  <script30d.js</script>
-</body>
+  <script defer src="uptime-30d>
 </html>
